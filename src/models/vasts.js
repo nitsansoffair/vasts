@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../db/mysql');
 
+// TODO - Add validators
 const Vast = sequelize.define('vasts', {
     id: {
         type: Sequelize.INTEGER,

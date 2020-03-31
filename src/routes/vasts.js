@@ -12,14 +12,14 @@ router.post('/create_vast', async (req, res) => {
             });
         }
 
-        const vast = await Vast.create({
+        const { dataValues } = await Vast.create({
             url: vastUrl,
             position,
             width,
             height
         });
 
-        res.status(201).send(vast.dataValues);
+        res.status(201).send(dataValues);
     } catch (e) {
         res.status(500).send(e);
     }
@@ -63,21 +63,10 @@ router.post('/edit_vast', async (req, res) => {
 
         const vast = await Vast.findByPk(vastId);
 
-        if(vastUrl){
-            vast.dataValues.url = vastUrl;
-        }
-
-        if(position){
-            vast.dataValues.position = position;
-        }
-
-        if(width){
-            vast.dataValues.width = width;
-        }
-
-        if(height){
-            vast.dataValues.height = height;
-        }
+        vast.dataValues.url = vastUrl ? vastUrl : vast.dataValues.url;
+        vast.dataValues.position = position ? position : vast.dataValues.position;
+        vast.dataValues.width = width ? width : vast.dataValues.width;
+        vast.dataValues.height = height ? height : vast.dataValues.height;
 
         vast.save();
 
