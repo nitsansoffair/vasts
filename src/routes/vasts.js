@@ -50,4 +50,41 @@ router.get('/fetch_vast', async (req, res) => {
     }
 });
 
+router.post('/edit_vast', async (req, res) => {
+    const fields = Object.keys(req.body);
+
+    if(fields.indexOf('vastId') === -1){
+        res.status(400).send({
+            error: 'vastId is required.'
+        });
+    }
+
+    try {
+        const { vastId, vastUrl, position, width, height } = req.body;
+        const res = await Vast.findById(Number(vastId));
+        const vast = res[0][0];
+
+        if(vastUrl){
+            vast.vast_url = vastUrl;
+        }
+
+        if(position){
+            vast.position = position;
+        }
+
+        if(width){
+            vast.width = width;
+        }
+
+        if(height){
+            vast.height = height;
+        }
+
+        // TODO - Finish Edit route
+        res.status(200);
+    } catch (e) {
+        res.status(500).send(e);
+    }
+});
+
 module.exports = router;

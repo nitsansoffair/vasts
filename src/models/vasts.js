@@ -1,36 +1,28 @@
-const db = require('../db/mysql');
+const Sequelize = require('sequelize');
+const sequelize = require('../db/mysql');
 
-class Vast {
-    constructor(url, position, width, height) {
-        this.url = url;
-        this.position = position;
-        this.width = width;
-        this.height = height;
+const Vast = sequelize.define('vasts', {
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+    },
+    url: {
+        type: Sequelize.STRING
+    },
+    position: {
+        type: Sequelize.STRING,
+        defaultValue: 'bottom_right'
+    },
+    width: {
+        type: Sequelize.INTEGER,
+        defaultValue: 100
+    },
+    height: {
+        type: Sequelize.INTEGER,
+        defaultValue: 100
     }
-
-    static fetchAll(){
-        return db.execute(`SELECT * FROM vasts`);
-    }
-
-    static findById(id){
-        const query = `
-            SELECT * FROM vasts
-            WHERE id = ${id}
-        `;
-
-        return db.execute(query);
-    }
-
-    save(){
-        const query = `
-            INSERT INTO vasts (vast_url, position, width, height)
-            VALUES (?, ?, ?, ?)
-        `;
-
-        const values = [this.url, this.position, this.width, this.height];
-
-        return db.execute(query, values);
-    }
-}
+});
 
 module.exports = Vast;
