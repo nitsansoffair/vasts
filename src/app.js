@@ -1,12 +1,10 @@
 const express = require('express');
-
 require('./models/vasts');
+const vastRouter = require('./routes/vasts');
 
-const db = require('./db/mysql');
 const app = express();
 
-db.execute('SELECT * FROM vasts')
-    .then(vasts => console.log(vasts))
-    .catch();
+app.use(express.json());
+app.use(vastRouter);
 
 module.exports = app;
