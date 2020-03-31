@@ -3,16 +3,14 @@ const router = new express.Router();
 const Vast = require('../models/vasts');
 
 router.post('/create_vast', async (req, res) => {
-    const fields = Object.keys(req.body);
-
-    if(fields.indexOf('vastUrl') === -1){
-        res.status(400).send({
-            error: 'vastUrl is required.'
-        });
-    }
-
     try {
         const { vastUrl, position = 'bottom_right', width = 100, height = 100 } = req.body;
+
+        if(!vastUrl){
+            res.status(400).send({
+                error: 'vastUrl is required.'
+            });
+        }
 
         const vast = await Vast.create({
             url: vastUrl,
@@ -29,10 +27,10 @@ router.post('/create_vast', async (req, res) => {
 
 router.get('/fetch_vasts', async (req, res) => {
     try {
-        const vasts = await Vast.fetchAll();
+        const vasts = await Vast.findAll();
 
         res.send({
-            vastIds: vasts[0]
+            vastIds: vasts
         });
     } catch (e) {
         res.status(500).send(e);
