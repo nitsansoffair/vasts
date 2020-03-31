@@ -9,7 +9,7 @@ const Vast = sequelize.define('vasts', {
         primaryKey: true
     },
     url: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(600)
     },
     position: {
         type: Sequelize.STRING,
