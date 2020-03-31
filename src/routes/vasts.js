@@ -14,11 +14,14 @@ router.post('/create_vast', async (req, res) => {
     try {
         const { vastUrl, position = 'bottom_right', width = 100, height = 100 } = req.body;
 
-        const vast = new Vast(vastUrl, position, width, height);
+        const vast = await Vast.create({
+            url: vastUrl,
+            position,
+            width,
+            height
+        });
 
-        await vast.save();
-
-        res.status(201).send();
+        res.status(201).send(vast.dataValues);
     } catch (e) {
         res.status(500).send(e);
     }
