@@ -39,10 +39,10 @@ router.get('/fetch_vasts', async (req, res) => {
 
 router.get('/fetch_vast', async (req, res) => {
     try {
-        const vast = await Vast.findById(req.query.id);
+        const vast = await Vast.findByPk(req.query.id);
 
         if(vast){
-            res.send(vast[0][0]);
+            res.send(vast);
         } else {
             res.status(404).send();
         }
