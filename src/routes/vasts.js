@@ -52,37 +52,36 @@ router.get('/fetch_vast', async (req, res) => {
 });
 
 router.post('/edit_vast', async (req, res) => {
-    const fields = Object.keys(req.body);
-
-    if(fields.indexOf('vastId') === -1){
-        res.status(400).send({
-            error: 'vastId is required.'
-        });
-    }
-
     try {
         const { vastId, vastUrl, position, width, height } = req.body;
-        const res = await Vast.findById(Number(vastId));
-        const vast = res[0][0];
+
+        if(!vastId){
+            res.status(400).send({
+                error: 'vastId is required.'
+            });
+        }
+
+        const vast = await Vast.findByPk(vastId);
 
         if(vastUrl){
-            vast.vast_url = vastUrl;
+            vast.dataValues.url = vastUrl;
         }
 
         if(position){
-            vast.position = position;
+            vast.dataValues.position = position;
         }
 
         if(width){
-            vast.width = width;
+            vast.dataValues.width = width;
         }
 
         if(height){
-            vast.height = height;
+            vast.dataValues.height = height;
         }
 
-        // TODO - Finish Edit route
-        res.status(200);
+        vast.save();
+
+        res.status(200).send(vast.dataValues);
     } catch (e) {
         res.status(500).send(e);
     }
