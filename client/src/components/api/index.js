@@ -68,9 +68,9 @@ const createVast = async (vast) => {
             url: process.env.REACT_APP_API_URL + '/create_vast',
             data: {
                 vastUrl: vast.url,
-                position: vast.position,
-                width: vast.width,
-                height: vast.height
+                position: vast.position ? vast.position : null,
+                width: vast.width ? vast.width : null,
+                height: vast.height ? vast.height : null
             }
         });
 
