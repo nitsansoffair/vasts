@@ -44,7 +44,9 @@ router.get('/fetch_vast', async (req, res) => {
         if(vast){
             res.send(vast);
         } else {
-            res.status(404).send();
+            res.status(404).send({
+                error: 'Vast did not found.'
+            });
         }
     } catch (e) {
         res.status(500).send(e);

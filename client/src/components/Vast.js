@@ -28,7 +28,7 @@ class Vast extends Component {
         }
     }
 
-    render() {
+    renderVast(){
         return (
             <div className="card">
                 <div className="card-body">
@@ -38,9 +38,16 @@ class Vast extends Component {
                         <p><b>Height:</b> {this.state.vast.height}</p>
                         <p><b>Width:</b> {this.state.vast.width}</p>
                     </> : <p>Loading...</p> }
-                    { this.state.error ? <div className="alert alert-danger" role="alert">{ this.state.error }</div> : null }
                 </div>
             </div>
+        );
+    }
+
+    render() {
+        return (
+            <>
+                { this.state.error ? <div className="alert alert-danger" role="alert">{ this.state.error }</div> : this.renderVast() }
+            </>
         );
     }
 }
