@@ -6,23 +6,17 @@ class Form extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            isEdit: false
-        };
+        this.state = {};
     }
 
     componentDidMount() {
-        if(this.props.match.params.id){
-            this.setState({
-                isEdit: true
-            });
-
+        if(this.props.editId){
             this.onLoad();
         }
     }
 
     async onLoad(){
-        const vast = await api.fetchVast(this.props.match.params.id);
+        const vast = await api.fetchVast(this.props.editId);
 
         if(vast){
             this.setState({
@@ -42,7 +36,7 @@ class Form extends Component {
         // TODO - Add validations
         const vast = this.state;
 
-        if(this.state.isEdit){
+        if(this.props.editId){
             api.updateVast(vast);
         } else {
             api.createVast(vast);
@@ -53,7 +47,7 @@ class Form extends Component {
         // TODO - Display errors
         return (
             <form>
-                { !this.state.isEdit || this.state.url ? (
+                { !this.props.editId || this.state.url ? (
                     <>
                         <div className="form-group">
                             <label htmlFor="url">URL</label>

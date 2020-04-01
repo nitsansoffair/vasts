@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import Form from './Form';
 import api from './api';
 
 class Vasts extends Component {
@@ -22,9 +23,16 @@ class Vasts extends Component {
         });
     }
 
-    render() {
+    renderVasts(){
         return (
             <>
+                <button type="button" className="btn btn-link" onClick={() => this.setState({
+                    isCreate: true,
+                    editId: null,
+                    ...this.state
+                })}>
+                    Create Vast
+                </button>
                 <table className="table">
                     <thead>
                     <tr>
@@ -43,8 +51,12 @@ class Vasts extends Component {
                             <td>{ width }</td>
                             <td>{ height }</td>
                             <td>
-                                <button type="button" className="btn btn-link">
-                                    <Link to={ `/vast/${id}/edit` }>Edit</Link>
+                                <button type="button" className="btn btn-link" onClick={() => this.setState({
+                                    isCreate: false,
+                                    editId: id,
+                                    ...this.state
+                                })}>
+                                    Edit
                                 </button> |
                                 <button type="button" className="btn btn-link">
                                     <Link to={ `/vast/${id}` }>View JSON</Link>
@@ -54,11 +66,32 @@ class Vasts extends Component {
                     )) : null }
                     </tbody>
                 </table>
-                <button type="button" className="btn btn-link">
-                    <Link to="/vast/new">Create Vast</Link>
-                </button>
             </>
         );
+    }
+
+    render() {
+        const { editId, isCreate } = this.state;
+
+        if(isCreate){
+            return (
+                <>
+                    <button type="button" className="btn btn-link">Close</button>
+                    <Form/>
+                </>
+                );
+        }
+
+        if(editId){
+            return (
+                <>
+                    <button type="button" className="btn btn-link">Close</button>
+                    <Form editId={editId}/>
+                </>
+                );
+        }
+
+        return this.renderVasts();
     }
 }
 
