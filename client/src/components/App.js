@@ -1,19 +1,24 @@
 import React from 'react';
 
+import api from './api/index';
+
 class App extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            vasts: [
-                {
-                    url: "url_8",
-                    position: "bottom_right",
-                    width: 100,
-                    height: 100
-                }
-            ]
+            vasts: []
         };
+
+        this.onLoad();
+    }
+
+    async onLoad(){
+        const vasts = await api.fetchVasts();
+
+        this.setState({
+            vasts
+        });
     }
 
     render() {
@@ -29,15 +34,18 @@ class App extends React.Component {
                 </tr>
                 </thead>
                 <tbody>
-                { this.state.vasts.length && this.state.vasts.map(({ url, position, width, height }, idx) => (
+                { this.state.vasts.length ? this.state.vasts.map(({ url, position, width, height }, idx) => (
                     <tr key={ idx }>
                         <td>{ url }</td>
                         <td>{ position }</td>
                         <td>{ width }</td>
                         <td>{ height }</td>
-                        <td>buttons</td>
+                        <td>
+                            <button type="button" className="btn btn-warning">Edit</button> |
+                            <button type="button" className="btn btn-primary">View JSON</button>
+                        </td>
                     </tr>
-                    )) }
+                    )) : null }
                 </tbody>
             </table>
         );

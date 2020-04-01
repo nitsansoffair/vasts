@@ -9,3 +9,5 @@ sequelize
         app.listen(port, () => console.log('Server is up on port ' + port));
     })
     .catch(err => console.log(err));
+
+// TODO - Add authorization
