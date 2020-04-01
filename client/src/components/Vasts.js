@@ -22,38 +22,42 @@ class Vasts extends Component {
         });
     }
 
-    // TODO - Styling links
     render() {
         return (
-            <table className="table">
-                <thead>
-                <tr>
-                    <th scope="col">vast url</th>
-                    <th scope="col">position</th>
-                    <th scope="col">width</th>
-                    <th scope="col">height</th>
-                    <th scope="col">buttons</th>
-                </tr>
-                </thead>
-                <tbody>
-                { this.state.vasts.length ? this.state.vasts.map(({ id, url, position, width, height }, idx) => (
-                    <tr key={ idx }>
-                        <td>{ url }</td>
-                        <td>{ position }</td>
-                        <td>{ width }</td>
-                        <td>{ height }</td>
-                        <td>
-                            <button type="button" className="btn btn-warning">
-                                <Link to={ `/vast/${id}/edit` }>Edit</Link>
-                            </button> |
-                            <button type="button" className="btn btn-primary">
-                                <Link to={ `/vast/${id}` }>View JSON</Link>
-                            </button>
-                        </td>
+            <>
+                <table className="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">vast url</th>
+                        <th scope="col">position</th>
+                        <th scope="col">width</th>
+                        <th scope="col">height</th>
+                        <th scope="col">buttons</th>
                     </tr>
-                )) : null }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    { this.state.vasts.length ? this.state.vasts.map(({ id, url, position, width, height }, idx) => (
+                        <tr key={ idx }>
+                            <td>{ url }</td>
+                            <td>{ position }</td>
+                            <td>{ width }</td>
+                            <td>{ height }</td>
+                            <td>
+                                <button type="button" className="btn btn-link">
+                                    <Link to={ `/vast/${id}/edit` }>Edit</Link>
+                                </button> |
+                                <button type="button" className="btn btn-link">
+                                    <Link to={ `/vast/${id}` }>View JSON</Link>
+                                </button>
+                            </td>
+                        </tr>
+                    )) : null }
+                    </tbody>
+                </table>
+                <button type="button" className="btn btn-link">
+                    <Link to="/vast/new">Create Vast</Link>
+                </button>
+            </>
         );
     }
 }

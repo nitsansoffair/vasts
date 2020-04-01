@@ -14,6 +14,7 @@ class Vast extends Component {
     }
 
     async onLoad(){
+        // TODO - Handle errors
         const vast = await api.fetchVast(this.props.match.params.id);
 
         if(vast){

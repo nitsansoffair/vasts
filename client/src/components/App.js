@@ -10,6 +10,7 @@ class App extends React.Component {
         return (
             <BrowserRouter>
                 <Route path="/" exact component={Vasts}/>
+                <Route path="/new" exact component={Form}/>
                 <Route path="/vast/:id" exact component={Vast}/>
                 <Route path="/vast/:id/edit" component={Form}/>
             </BrowserRouter>

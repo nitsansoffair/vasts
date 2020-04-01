@@ -61,8 +61,32 @@ const updateVast = async (vast) => {
     return null;
 };
 
+const createVast = async (vast) => {
+    try {
+        const res = await axios({
+            method: 'post',
+            url: process.env.REACT_APP_API_URL + '/create_vast',
+            data: {
+                vastUrl: vast.url,
+                position: vast.position,
+                width: vast.width,
+                height: vast.height
+            }
+        });
+
+        if(res){
+            return res;
+        }
+    } catch (e) {
+        console.log(e);
+    }
+
+    return null;
+};
+
 export default {
     fetchVasts,
     fetchVast,
-    updateVast
+    updateVast,
+    createVast
 };

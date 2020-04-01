@@ -6,9 +6,19 @@ class Form extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        this.state = {
+            isEdit: false
+        };
+    }
 
-        this.onLoad();
+    componentDidMount() {
+        if(this.props.match.params.id){
+            this.setState({
+                isEdit: true
+            });
+
+            this.onLoad();
+        }
     }
 
     async onLoad(){
@@ -20,7 +30,8 @@ class Form extends Component {
                 url: vast.url,
                 position: vast.position,
                 width: vast.width,
-                height: vast.height
+                height: vast.height,
+                isEdit: this.state.isEdit
             });
         }
     }
@@ -31,38 +42,43 @@ class Form extends Component {
         // TODO - Add validations
         const vast = this.state;
 
-        api.updateVast(vast);
+        if(this.state.isEdit){
+            api.updateVast(vast);
+        } else {
+            api.createVast(vast);
+        }
     };
 
     render() {
+        // TODO - Display errors
         return (
             <form>
-                { this.state.url ? (
+                { !this.state.isEdit || this.state.url ? (
                     <>
                         <div className="form-group">
                             <label htmlFor="url">URL</label>
-                            <input type="text" className="form-control" value={this.state.url}
+                            <input type="text" className="form-control" value={this.state.url ? this.state.url : ''}
                                    onChange={e => this.setState({
                                        url: e.target.value
                                    })}/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="position">Position</label>
-                            <input type="text" className="form-control" value={this.state.position}
+                            <input type="text" className="form-control" value={this.state.position ? this.state.position : ''}
                                    onChange={e => this.setState({
                                        position: e.target.value
                                    })}/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="width">Width</label>
-                            <input type="text" className="form-control" value={this.state.width}
+                            <input type="text" className="form-control" value={this.state.width ? this.state.width : ''}
                                    onChange={e => this.setState({
                                        width: e.target.value
                                    })}/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="height">Height</label>
-                            <input type="text" className="form-control" value={this.state.height}
+                            <input type="text" className="form-control" value={this.state.height ? this.state.height : ''}
                                    onChange={e => this.setState({
                                        height: e.target.value
                                    })}/>
