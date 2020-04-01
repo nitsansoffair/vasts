@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import validator from 'validator/es';
 import api from './api/index';
 
 class Form extends Component {
@@ -30,13 +31,68 @@ class Form extends Component {
         }
     }
 
+    // TODO - Refactor with error variable and setState at the end
+    validate(vast){
+        if(vast.url && !validator.isURL(vast.url)){
+            this.setState({
+                error: 'Vast url is not valid.',
+                success: null
+            });
+
+            return false;
+        }
+
+        if(vast.position && !validator.isIn(vast.position, [
+            'top_left', 'top_middle', 'top_right', 'middle_left', 'middle_right', 'bottom_left', 'bottom_middle', 'bottom_right'
+        ])){
+            this.setState({
+                error: 'Vast position is not valid.',
+                success: null
+            });
+
+            return false;
+        }
+
+        if(vast.width && (!validator.isNumeric(vast.width.toString()) || Number(vast.width) < 100 || Number(vast.width) > 1000)){
+            this.setState({
+                error: 'Vast width is not valid.',
+                success: null
+            });
+
+            return false;
+        }
+
+        if(vast.height && (!validator.isNumeric(vast.height.toString()) || Number(vast.height) < 100 || Number(vast.height) > 1000)){
+            this.setState({
+                error: 'Vast height is not valid.',
+                success: null
+            });
+
+            return false;
+        }
+
+        return true;
+    }
+
     onSubmitForm = (e) => {
         e.preventDefault();
 
-        // TODO - Add validations
         const vast = this.state;
 
+        if(!this.validate(vast)){
+            return;
+        }
+
         if(this.props.editId){
+            if(!vast.id){
+                this.setState({
+                    error: 'Error update vast.',
+                    success: null
+                });
+
+                return;
+            }
+
             api.updateVast(vast)
                 .then(res => {
                     if(!res){
@@ -53,10 +109,20 @@ class Form extends Component {
                 })
                 .catch(error => {
                     this.setState({
-                        error
+                        error,
+                        success: null
                     });
                 })
         } else {
+            if(!vast.url){
+                this.setState({
+                    error: 'Vast url is required.',
+                    success: null
+                });
+
+                return;
+            }
+
             api.createVast(vast)
                 .then(res => {
                     if (!res) {
