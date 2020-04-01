@@ -37,7 +37,32 @@ const fetchVast = async (id) => {
     return null;
 };
 
+const updateVast = async (vast) => {
+    try {
+        const res = await axios({
+            method: 'post',
+            url: process.env.REACT_APP_API_URL + '/edit_vast',
+            data: {
+                vastId: vast.id,
+                vastUrl: vast.url,
+                position: vast.position,
+                width: vast.width,
+                height: vast.height
+            }
+        });
+
+        if(res){
+            return res;
+        }
+    } catch (e) {
+        console.log(e);
+    }
+
+    return null;
+};
+
 export default {
     fetchVasts,
-    fetchVast
+    fetchVast,
+    updateVast
 };

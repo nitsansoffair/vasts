@@ -3,15 +3,15 @@ const router = new express.Router();
 const Vast = require('../models/vasts');
 
 router.post('/create_vast', async (req, res) => {
+    const { vastUrl, position = 'bottom_right', width = 100, height = 100 } = req.body;
+
+    if(!vastUrl){
+        res.status(400).send({
+            error: 'vastUrl is required.'
+        });
+    }
+
     try {
-        const { vastUrl, position = 'bottom_right', width = 100, height = 100 } = req.body;
-
-        if(!vastUrl){
-            res.status(400).send({
-                error: 'vastUrl is required.'
-            });
-        }
-
         const { dataValues } = await Vast.create({
             url: vastUrl,
             position,
@@ -52,23 +52,23 @@ router.get('/fetch_vast', async (req, res) => {
 });
 
 router.post('/edit_vast', async (req, res) => {
+    const { vastId, vastUrl, position, width, height } = req.body;
+
+    if(!vastId){
+        res.status(400).send({
+            error: 'vastId is required.'
+        });
+    }
+
     try {
-        const { vastId, vastUrl, position, width, height } = req.body;
-
-        if(!vastId){
-            res.status(400).send({
-                error: 'vastId is required.'
-            });
-        }
-
         const vast = await Vast.findByPk(vastId);
 
-        vast.dataValues.url = vastUrl ? vastUrl : vast.dataValues.url;
-        vast.dataValues.position = position ? position : vast.dataValues.position;
-        vast.dataValues.width = width ? width : vast.dataValues.width;
-        vast.dataValues.height = height ? height : vast.dataValues.height;
+        vast.url = vastUrl ? vastUrl : vast.dataValues.url;
+        vast.position = position ? position : vast.dataValues.position;
+        vast.width = width ? width : vast.dataValues.width;
+        vast.height = height ? height : vast.dataValues.height;
 
-        vast.save();
+        await vast.save();
 
         res.status(200).send(vast.dataValues);
     } catch (e) {
