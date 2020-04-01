@@ -14,12 +14,16 @@ class Vast extends Component {
     }
 
     async onLoad(){
-        // TODO - Handle errors
         const vast = await api.fetchVast(this.props.match.params.id);
 
         if(vast){
             this.setState({
-                vast
+                vast,
+                error: null
+            });
+        } else {
+            this.setState({
+                error: `Error fetching vast with id ${this.props.match.params.id}`
             });
         }
     }
@@ -34,6 +38,7 @@ class Vast extends Component {
                         <p><b>Height:</b> {this.state.vast.height}</p>
                         <p><b>Width:</b> {this.state.vast.width}</p>
                     </> : <p>Loading...</p> }
+                    { this.state.error ? <div className="alert alert-danger" role="alert">{ this.state.error }</div> : null }
                 </div>
             </div>
         );

@@ -59,7 +59,7 @@ class Vasts extends Component {
                                     Edit
                                 </button> |
                                 <button type="button" className="btn btn-link">
-                                    <Link to={ `/vast/${id}` }>View JSON</Link>
+                                    <Link to={ `/vast/${id}` } target="_blank">View JSON</Link>
                                 </button>
                             </td>
                         </tr>

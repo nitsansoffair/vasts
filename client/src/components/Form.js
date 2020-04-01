@@ -37,14 +37,49 @@ class Form extends Component {
         const vast = this.state;
 
         if(this.props.editId){
-            api.updateVast(vast);
+            api.updateVast(vast)
+                .then(res => {
+                    if(!res){
+                        this.setState({
+                            error: `Error update vast with id ${vast.id}`,
+                            success: null
+                        })
+                    } else {
+                        this.setState({
+                            success: `Update vast with id ${vast.id} succeeded`,
+                            error: null
+                        })
+                    }
+                })
+                .catch(error => {
+                    this.setState({
+                        error
+                    });
+                })
         } else {
-            api.createVast(vast);
+            api.createVast(vast)
+                .then(res => {
+                    if (!res) {
+                        this.setState({
+                            error: `Error create vast`,
+                            success: null
+                        });
+                    } else {
+                        this.setState({
+                            success: 'Create vast succeeded',
+                            error: null
+                        })
+                    }
+                })
+                .catch(error => {
+                    this.setState({
+                        error
+                    });
+                })
         }
     };
 
     render() {
-        // TODO - Display errors
         return (
             <form>
                 { !this.props.editId || this.state.url ? (
@@ -80,6 +115,8 @@ class Form extends Component {
                         <button type="submit" className="btn btn-primary" onClick={this.onSubmitForm}>Submit</button>
                     </>
                 ) : <p>Loading...</p> }
+                { this.state.error ? <div className="alert alert-danger" role="alert">{ this.state.error }</div> : null }
+                { this.state.success ? <div className="alert alert-success" role="alert">{ this.state.success }</div> : null }
             </form>
         );
     }
