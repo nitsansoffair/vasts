@@ -26,11 +26,13 @@ class Vasts extends Component {
     renderVasts(){
         return (
             <>
-                <button type="button" className="btn btn-link" onClick={() => this.setState({
-                    isCreate: true,
-                    editId: null,
-                    ...this.state
-                })}>
+                <button type="button" className="btn btn-link" onClick={(e) => {
+                    e.preventDefault();
+                    this.setState({
+                        isCreate: true,
+                        editId: null,
+                    })
+                }}>
                     Create Vast
                 </button>
                 <table className="table">
@@ -51,11 +53,13 @@ class Vasts extends Component {
                             <td>{ width }</td>
                             <td>{ height }</td>
                             <td>
-                                <button type="button" className="btn btn-link" onClick={() => this.setState({
-                                    isCreate: false,
-                                    editId: id,
-                                    ...this.state
-                                })}>
+                                <button type="button" className="btn btn-link" onClick={(e) => {
+                                    e.preventDefault();
+                                    this.setState({
+                                        isCreate: false,
+                                        editId: id,
+                                    })
+                                }}>
                                     Edit
                                 </button> |
                                 <button type="button" className="btn btn-link">
@@ -76,7 +80,13 @@ class Vasts extends Component {
         if(isCreate){
             return (
                 <>
-                    <button type="button" className="btn btn-link">Close</button>
+                    <button type="button" className="btn btn-link" onClick={e => {
+                        e.preventDefault();
+                        this.setState({
+                            editId: false,
+                            isCreate: false
+                        })
+                    }}>Close</button>
                     <Form/>
                 </>
                 );
@@ -85,7 +95,14 @@ class Vasts extends Component {
         if(editId){
             return (
                 <>
-                    <button type="button" className="btn btn-link">Close</button>
+                    <button type="button" className="btn btn-link" onClick={e => {
+                        e.preventDefault();
+                        this.setState({
+                            ...this.state,
+                            editId: false,
+                            isCreate: false
+                        })
+                    }}>Close</button>
                     <Form editId={editId}/>
                 </>
                 );
