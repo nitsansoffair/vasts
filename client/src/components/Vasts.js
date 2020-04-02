@@ -42,7 +42,7 @@ class Vasts extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    { this.props.vasts.length ? this.props.vasts.map(({ id, url, position, width, height }, idx) => (
+                    { this.props.vasts && this.props.vasts.length ? this.props.vasts.map(({ id, url, position, width, height }, idx) => (
                         <tr key={ idx }>
                             <td>{ url }</td>
                             <td>{ position }</td>

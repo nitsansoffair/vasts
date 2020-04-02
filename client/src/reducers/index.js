@@ -1,7 +1,29 @@
-import { combineReducers } from 'redux';
+const vastsReducer = (state = {}, action) => {
+    switch (action.type) {
+        case 'FETCH_VASTS':
+            return {
+                ...state,
+                vasts: action.payload
+            };
+        case 'FETCH_VAST':
+            return {
+                ...state,
+                vast: action.payload
+            };
+        case 'CREATE_VAST':
+            return {
+                ...state,
+                created: action.payload
+            };
+        case 'UPDATE_VAST':
+            return {
+                ...state,
+                updated: action.payload
+            };
+        default: {
+            return state;
+        }
+    }
+};
 
-import vastsReducer from './vastsReducer';
-
-export default combineReducers({
-    vasts: vastsReducer
-});
+export default vastsReducer;

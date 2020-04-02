@@ -9,8 +9,29 @@ export const fetchVasts = () => async (dispatch) => {
     });
 };
 
-export const fetchVast = async () => {};
+export const fetchVast = (id) => async (dispatch) => {
+    const vast = await api.fetchVast(id);
 
-export const createVast = async () => {};
+    dispatch({
+        type: 'FETCH_VAST',
+        payload: vast
+    });
+};
 
-export const editVast = async () => {};
+export const createVast = (vast) => async (dispatch) => {
+    const res = await api.createVast(vast);
+
+    dispatch({
+        type: 'CREATE_VAST',
+        payload: res
+    });
+};
+
+export const updateVast = (vast) => async (dispatch) => {
+    const res = await api.updateVast(vast);
+
+    dispatch({
+        type: 'UPDATE_VAST',
+        payload: res
+    });
+};

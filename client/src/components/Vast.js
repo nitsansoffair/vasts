@@ -1,22 +1,19 @@
 import React, { Component } from 'react';
 import validator from 'validator/es';
+import { connect } from 'react-redux';
 
-import api from '../api/index';
+import { fetchVast } from '../actions';
 
 class Vast extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            vast: null
+            error: null
         };
     }
 
     componentDidMount() {
-        this.onLoad();
-    }
-
-    async onLoad(){
         const id = this.props.match.params.id;
 
         if(!validator.isNumeric(id) || Number(id) < 1){
@@ -27,29 +24,18 @@ class Vast extends Component {
             return;
         }
 
-        const vast = await api.fetchVast(id);
-
-        if(vast){
-            this.setState({
-                vast,
-                error: null
-            });
-        } else {
-            this.setState({
-                error: `Error fetching vast with id ${id}`
-            });
-        }
+        this.props.fetchVast(id);
     }
 
     renderVast(){
         return (
             <div className="card">
                 <div className="card-body">
-                    { this.state.vast ? <>
-                        <p><b>URL:</b> {this.state.vast.url}</p>
-                        <p><b>Position:</b> {this.state.vast.position}</p>
-                        <p><b>Height:</b> {this.state.vast.height}</p>
-                        <p><b>Width:</b> {this.state.vast.width}</p>
+                    { this.props.vast ? <>
+                        <p><b>URL:</b> {this.props.vast.url}</p>
+                        <p><b>Position:</b> {this.props.vast.position}</p>
+                        <p><b>Height:</b> {this.props.vast.height}</p>
+                        <p><b>Width:</b> {this.props.vast.width}</p>
                     </> : <p>Loading...</p> }
                 </div>
             </div>
@@ -65,4 +51,13 @@ class Vast extends Component {
     }
 }
 
-export default Vast;
+const mapStateToProps = (state) => {
+    return {
+        vast: state.vast
+    };
+};
+
+export default connect(
+    mapStateToProps ,
+    { fetchVast }
+)(Vast);
