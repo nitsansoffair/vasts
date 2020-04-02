@@ -1,26 +1,22 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { fetchVasts } from '../actions/index';
 
 import Form from './Form';
-import api from './api';
 
 class Vasts extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            vasts: []
+            isCreate: false,
+            editId: null
         };
-
-        this.onLoad();
     }
 
-    async onLoad(){
-        const vasts = await api.fetchVasts();
-
-        this.setState({
-            vasts
-        });
+    componentDidMount() {
+        this.props.fetchVasts();
     }
 
     renderVasts(){
@@ -46,7 +42,7 @@ class Vasts extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    { this.state.vasts.length ? this.state.vasts.map(({ id, url, position, width, height }, idx) => (
+                    { this.props.vasts.length ? this.props.vasts.map(({ id, url, position, width, height }, idx) => (
                         <tr key={ idx }>
                             <td>{ url }</td>
                             <td>{ position }</td>
@@ -112,4 +108,13 @@ class Vasts extends Component {
     }
 }
 
-export default Vasts;
+const mapStateToProps = (state) => {
+    return {
+        vasts: state.vasts
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    { fetchVasts }
+)(Vasts);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import validator from 'validator/es';
 
-import api from './api/index';
+import api from '../api/index';
 
 class Vast extends Component {
     constructor(props) {
