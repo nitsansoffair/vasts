@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-
 import validator from 'validator/es';
+
 import api from './api/index';
 
 class Form extends Component {
@@ -31,7 +31,6 @@ class Form extends Component {
         }
     }
 
-    // TODO - Refactor with error variable and setState at the end
     validate(vast){
         if(vast.url && !validator.isURL(vast.url)){
             this.setState({

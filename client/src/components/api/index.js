@@ -19,7 +19,6 @@ const fetchVasts = async () => {
 
 const fetchVast = async (id) => {
     try {
-        // TODO - Fix error message at client console
         const res = await axios({
             method: 'get',
             url: process.env.REACT_APP_API_URL + '/fetch_vast',

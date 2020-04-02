@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import validator from 'validator/es';
 
 import api from './api/index';
 
@@ -9,12 +10,24 @@ class Vast extends Component {
         this.state = {
             vast: null
         };
+    }
 
+    componentDidMount() {
         this.onLoad();
     }
 
     async onLoad(){
-        const vast = await api.fetchVast(this.props.match.params.id);
+        const id = this.props.match.params.id;
+
+        if(!validator.isNumeric(id) || Number(id) < 1){
+            this.setState({
+                error: 'invalid id.'
+            });
+
+            return;
+        }
+
+        const vast = await api.fetchVast(id);
 
         if(vast){
             this.setState({
@@ -23,7 +36,7 @@ class Vast extends Component {
             });
         } else {
             this.setState({
-                error: `Error fetching vast with id ${this.props.match.params.id}`
+                error: `Error fetching vast with id ${id}`
             });
         }
     }
