@@ -62,13 +62,13 @@ class Form extends Component {
         e.preventDefault();
 
         const { vast } = this.state;
-        const { isCreate, createVast, updateVast } = this.props;
+        const { formCreate, createVast, updateVast } = this.props;
 
         if(!this.validate(vast)){
             return;
         }
 
-        if(!isCreate){
+        if(!formCreate){
             if(!vast.id){
                 this.setState({
                     error: 'Error update vast.'
@@ -149,10 +149,8 @@ class Form extends Component {
 
 const mapStateToProps = (state, prevProps) => {
     return {
-        createdStatus: state.created,
-        updatedStatus: state.updated,
         vast: state.vast ? state.vast : prevProps.vast,
-        isCreate: prevProps.isCreate
+        formCreate: state.formCreate
     };
 };
 

@@ -102,7 +102,7 @@ class Vasts extends Component {
                     e.preventDefault();
                     this.props.toggleCreateVastForm();
                 }}>Close</button>
-                <Form isCreate={true} created={null} updated={null}/>
+                <Form/>
             </>
         );
     }
@@ -114,7 +114,7 @@ class Vasts extends Component {
                     e.preventDefault();
                     this.props.toggleUpdateVastForm();
                 }}>Close</button>
-                <Form vast={vast} updated={null} created={null}/>
+                <Form vast={vast}/>
             </>
         );
     }
