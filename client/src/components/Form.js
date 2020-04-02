@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import validator from 'validator/es';
+import { connect } from 'react-redux';
 
-import api from '../api/index';
+import { createVast, updateVast } from '../actions';
 
 class Form extends Component {
     constructor(props) {
@@ -11,23 +12,44 @@ class Form extends Component {
     }
 
     componentDidMount() {
-        if(this.props.editId){
-            this.onLoad();
-        }
+        const { vast } = this.props;
+
+        this.setState({
+            vast: vast ? vast : {},
+            error: null,
+            success: null
+        });
     }
 
-    async onLoad(){
-        const vast = await api.fetchVast(this.props.editId);
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(prevProps !== this.props){
+            const { updated, created, isCreate } = this.props;
 
-        if(vast){
-            this.setState({
-                id: vast.id,
-                url: vast.url,
-                position: vast.position,
-                width: vast.width,
-                height: vast.height,
-                isEdit: this.state.isEdit
-            });
+            if(isCreate) {
+                if(!created || created.status !== 201) {
+                    this.setState({
+                        error: `Error create vast`,
+                        success: null
+                    });
+                } else {
+                    this.setState({
+                        success: `Create vast succeeded`,
+                        error: null
+                    });
+                }
+            } else {
+                if(!updated || updated.status !== 200){
+                    this.setState({
+                        error: `Error update vast with id ${this.state.vast.id}`,
+                        success: null
+                    });
+                } else {
+                    this.setState({
+                        success: `Update vast with id ${this.state.vast.id} succeeded`,
+                        error: null
+                    });
+                }
+            }
         }
     }
 
@@ -76,13 +98,14 @@ class Form extends Component {
     onSubmitForm = (e) => {
         e.preventDefault();
 
-        const vast = this.state;
+        const { vast } = this.state;
+        const { isCreate, createVast, updateVast } = this.props;
 
         if(!this.validate(vast)){
             return;
         }
 
-        if(this.props.editId){
+        if(!isCreate){
             if(!vast.id){
                 this.setState({
                     error: 'Error update vast.',
@@ -92,26 +115,7 @@ class Form extends Component {
                 return;
             }
 
-            api.updateVast(vast)
-                .then(res => {
-                    if(!res){
-                        this.setState({
-                            error: `Error update vast with id ${vast.id}`,
-                            success: null
-                        })
-                    } else {
-                        this.setState({
-                            success: `Update vast with id ${vast.id} succeeded`,
-                            error: null
-                        })
-                    }
-                })
-                .catch(error => {
-                    this.setState({
-                        error,
-                        success: null
-                    });
-                })
+            updateVast(vast);
         } else {
             if(!vast.url){
                 this.setState({
@@ -122,59 +126,55 @@ class Form extends Component {
                 return;
             }
 
-            api.createVast(vast)
-                .then(res => {
-                    if (!res) {
-                        this.setState({
-                            error: `Error create vast`,
-                            success: null
-                        });
-                    } else {
-                        this.setState({
-                            success: 'Create vast succeeded',
-                            error: null
-                        })
-                    }
-                })
-                .catch(error => {
-                    this.setState({
-                        error
-                    });
-                })
+            createVast(vast);
         }
     };
 
     render() {
+        const { vast } = this.state;
+
         return (
             <form>
-                { !this.props.editId || this.state.url ? (
+                { vast ? (
                     <>
                         <div className="form-group">
                             <label htmlFor="url">URL</label>
-                            <input type="text" className="form-control" value={this.state.url ? this.state.url : ''}
+                            <input type="text" className="form-control" value={vast.url ? vast.url : ''}
                                    onChange={e => this.setState({
-                                       url: e.target.value
+                                       vast: {
+                                          ...vast,
+                                           url: e.target.value,
+                                       }
                                    })}/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="position">Position</label>
-                            <input type="text" className="form-control" value={this.state.position ? this.state.position : ''}
+                            <input type="text" className="form-control" value={vast.position ? vast.position : ''}
                                    onChange={e => this.setState({
-                                       position: e.target.value
+                                       vast: {
+                                           ...vast,
+                                           position: e.target.value,
+                                       }
                                    })}/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="width">Width</label>
-                            <input type="text" className="form-control" value={this.state.width ? this.state.width : ''}
+                            <input type="text" className="form-control" value={vast.width ? vast.width : ''}
                                    onChange={e => this.setState({
-                                       width: e.target.value
+                                       vast: {
+                                           ...vast,
+                                           width: e.target.value,
+                                       }
                                    })}/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="height">Height</label>
-                            <input type="text" className="form-control" value={this.state.height ? this.state.height : ''}
+                            <input type="text" className="form-control" value={vast.height ? vast.height : ''}
                                    onChange={e => this.setState({
-                                       height: e.target.value
+                                       vast: {
+                                           ...vast,
+                                           height: e.target.value
+                                       }
                                    })}/>
                         </div>
                         <button type="submit" className="btn btn-primary" onClick={this.onSubmitForm}>Submit</button>
@@ -187,4 +187,16 @@ class Form extends Component {
     }
 }
 
-export default Form;
+const mapStateToProps = (state, prevProps) => {
+    return {
+        created: state.created,
+        updated: state.updated,
+        vast: state.vast ? state.vast : prevProps.vast,
+        isCreate: prevProps.isCreate
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    { createVast, updateVast }
+)(Form);

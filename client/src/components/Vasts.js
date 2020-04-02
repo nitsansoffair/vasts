@@ -83,12 +83,14 @@ class Vasts extends Component {
                             isCreate: false
                         })
                     }}>Close</button>
-                    <Form/>
+                    <Form isCreate={true}/>
                 </>
                 );
         }
 
         if(editId){
+            const vast = this.props.vasts.find(vast => vast.id === editId);
+
             return (
                 <>
                     <button type="button" className="btn btn-link" onClick={e => {
@@ -99,7 +101,7 @@ class Vasts extends Component {
                             isCreate: false
                         })
                     }}>Close</button>
-                    <Form editId={editId}/>
+                    <Form vast={vast}/>
                 </>
                 );
         }
