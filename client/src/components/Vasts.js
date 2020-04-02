@@ -20,10 +20,14 @@ class Vasts extends Component {
         return (
             <>
                 { this.props.createdStatus === 201 ? <div className="alert alert-success" role="alert">
-                    { `A new vast has been created.` }
+                    <p>
+                        A new vast with URL <b>{ this.props.vastUrl }</b> has been created
+                    </p>
                 </div> : null }
                 { this.props.updatedStatus === 200 ? <div className="alert alert-success" role="alert">
-                    { `Vast has been updated.` }
+                    <p>
+                        Vast with URL <b>{this.props.vastUrl}</b> has been updated.
+                    </p>
                 </div> : null }
             </>
         );
@@ -141,6 +145,7 @@ const mapStateToProps = (state) => {
         vasts: state.vasts,
         createdStatus: state.createdStatus,
         updatedStatus: state.updatedStatus,
+        vastUrl: state.vastUrl,
         formEditId: state.formEditId,
         formCreate: state.formCreate
     };
