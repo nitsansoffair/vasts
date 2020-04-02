@@ -47,9 +47,8 @@ const vastsReducer = (state = {}, action) => {
                 updatedStatus: null,
                 vastUrl: null
             };
-        default: {
+        default:
             return state;
-        }
     }
 };
 

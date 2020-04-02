@@ -21,7 +21,15 @@ class Form extends Component {
     }
 
     validate(vast){
-        if(vast.url && !validator.isURL(vast.url)){
+        if(!vast.url){
+            this.setState({
+                error: 'Vast url is required.'
+            });
+
+            return false;
+        }
+
+        if(!validator.isURL(vast.url)){
             this.setState({
                 error: 'Vast url is not valid.'
             });
@@ -69,86 +77,78 @@ class Form extends Component {
         }
 
         if(!formCreate){
-            if(!vast.id){
-                this.setState({
-                    error: 'Error update vast.'
-                });
-
-                return;
-            }
-
             updateVast(vast);
         } else {
-            if(!vast.url){
-                this.setState({
-                    error: 'Vast url is required.'
-                });
-
-                return;
-            }
-
             createVast(vast);
         }
     };
+
+    renderInputs(vast){
+        return (
+            <>
+                <div className="form-group">
+                    <label htmlFor="url">URL</label>
+                    <input type="text" className="form-control" value={vast.url ? vast.url : ''}
+                           onChange={e => this.setState({
+                               vast: {
+                                   ...vast,
+                                   url: e.target.value,
+                               }
+                           })}/>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="position">Position</label>
+                    <input type="text" className="form-control" value={vast.position ? vast.position : ''}
+                           onChange={e => this.setState({
+                               vast: {
+                                   ...vast,
+                                   position: e.target.value,
+                               }
+                           })}/>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="width">Width</label>
+                    <input type="text" className="form-control" value={vast.width ? vast.width : ''}
+                           onChange={e => this.setState({
+                               vast: {
+                                   ...vast,
+                                   width: e.target.value,
+                               }
+                           })}/>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="height">Height</label>
+                    <input type="text" className="form-control" value={vast.height ? vast.height : ''}
+                           onChange={e => this.setState({
+                               vast: {
+                                   ...vast,
+                                   height: e.target.value
+                               }
+                           })}/>
+                </div>
+                <button type="submit" className="btn btn-primary" onClick={this.onSubmitForm}>Submit</button>
+            </>
+        );
+    }
+
+    renderError(){
+        return this.state.error ? (
+            <>
+                <hr/>
+                <div className="alert alert-danger" role="alert">
+                    { this.state.error }
+                </div>
+            </>
+        ) : null;
+    }
 
     render() {
         const { vast } = this.state;
 
         return (
             <form>
-                { vast ? (
-                    <>
-                        <div className="form-group">
-                            <label htmlFor="url">URL</label>
-                            <input type="text" className="form-control" value={vast.url ? vast.url : ''}
-                                   onChange={e => this.setState({
-                                       vast: {
-                                          ...vast,
-                                           url: e.target.value,
-                                       }
-                                   })}/>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="position">Position</label>
-                            <input type="text" className="form-control" value={vast.position ? vast.position : ''}
-                                   onChange={e => this.setState({
-                                       vast: {
-                                           ...vast,
-                                           position: e.target.value,
-                                       }
-                                   })}/>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="width">Width</label>
-                            <input type="text" className="form-control" value={vast.width ? vast.width : ''}
-                                   onChange={e => this.setState({
-                                       vast: {
-                                           ...vast,
-                                           width: e.target.value,
-                                       }
-                                   })}/>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="height">Height</label>
-                            <input type="text" className="form-control" value={vast.height ? vast.height : ''}
-                                   onChange={e => this.setState({
-                                       vast: {
-                                           ...vast,
-                                           height: e.target.value
-                                       }
-                                   })}/>
-                        </div>
-                        <button type="submit" className="btn btn-primary" onClick={this.onSubmitForm}>Submit</button>
-                    </>
-                ) : <p>Loading...</p> }
-                { this.state.error ? (
-                    <>
-                        <hr/>
-                        <div className="alert alert-danger" role="alert">
-                            { this.state.error }
-                        </div>
-                    </>
-                ) : null }
+                { vast ? this.renderInputs(vast) : <p>Loading...</p> }
+                { this.renderError() }
             </form>
         );
     }
