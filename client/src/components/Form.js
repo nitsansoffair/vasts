@@ -141,7 +141,14 @@ class Form extends Component {
                         <button type="submit" className="btn btn-primary" onClick={this.onSubmitForm}>Submit</button>
                     </>
                 ) : <p>Loading...</p> }
-                { this.state.error ? <div className="alert alert-danger" role="alert">{ this.state.error }</div> : null }
+                { this.state.error ? (
+                    <>
+                        <hr/>
+                        <div className="alert alert-danger" role="alert">
+                            { this.state.error }
+                        </div>
+                    </>
+                ) : null }
             </form>
         );
     }

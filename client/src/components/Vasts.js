@@ -105,7 +105,7 @@ class Vasts extends Component {
                 <button type="button" className="btn btn-link" onClick={e => {
                     e.preventDefault();
                     this.props.toggleCreateVastForm();
-                }}>Close</button>
+                }}>Back to Vasts</button>
                 <Form/>
             </>
         );
@@ -117,7 +117,7 @@ class Vasts extends Component {
                 <button type="button" className="btn btn-link" onClick={e => {
                     e.preventDefault();
                     this.props.toggleUpdateVastForm();
-                }}>Close</button>
+                }}>Back to Vasts</button>
                 <Form vast={vast}/>
             </>
         );
