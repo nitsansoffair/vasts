@@ -13,12 +13,31 @@ const vastsReducer = (state = {}, action) => {
         case 'CREATE_VAST':
             return {
                 ...state,
-                created: action.payload
+                createdStatus: action.payload.status,
+                updatedStatus: null,
+                formCreate: action.payload.status !== 201,
+                vasts: [
+                    action.payload.vast,
+                    ...state.vasts
+                ]
             };
         case 'UPDATE_VAST':
             return {
                 ...state,
-                updated: action.payload
+                updatedStatus: action.payload.status,
+                createdStatus: null,
+                formEditId: action.payload.status === 200 ? null : state.formEditId,
+                vasts: state.vasts.map(vast => vast.id === action.payload.vast.id ? action.payload.vast : vast)
+            };
+        case 'TOGGLE_CREATE_FORM':
+            return {
+                ...state,
+                formCreate: action.payload
+            };
+        case 'TOGGLE_UPDATE_FORM':
+            return {
+                ...state,
+                formEditId: action.payload
             };
         default: {
             return state;

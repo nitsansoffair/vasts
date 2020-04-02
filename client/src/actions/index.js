@@ -23,7 +23,10 @@ export const createVast = (vast) => async (dispatch) => {
 
     dispatch({
         type: 'CREATE_VAST',
-        payload: res
+        payload: {
+            vast: res.data,
+            status: res.status
+        }
     });
 };
 
@@ -32,6 +35,23 @@ export const updateVast = (vast) => async (dispatch) => {
 
     dispatch({
         type: 'UPDATE_VAST',
-        payload: res
+        payload: {
+            vast: res.data,
+            status: res.status
+        }
     });
+};
+
+export const toggleCreateVastForm = (isOpen = false) => {
+    return {
+        type: 'TOGGLE_CREATE_FORM',
+        payload: isOpen
+    };
+};
+
+export const toggleUpdateVastForm = (id = null) => {
+    return {
+        type: 'TOGGLE_UPDATE_FORM',
+        payload: id
+    };
 };

@@ -16,48 +16,14 @@ class Form extends Component {
 
         this.setState({
             vast: vast ? vast : {},
-            error: null,
-            success: null
+            error: null
         });
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if(prevProps !== this.props){
-            const { updated, created, isCreate } = this.props;
-
-            if(isCreate) {
-                if(!created || created.status !== 201) {
-                    this.setState({
-                        error: `Error create vast`,
-                        success: null
-                    });
-                } else {
-                    this.setState({
-                        success: `Create vast succeeded`,
-                        error: null
-                    });
-                }
-            } else {
-                if(!updated || updated.status !== 200){
-                    this.setState({
-                        error: `Error update vast with id ${this.state.vast.id}`,
-                        success: null
-                    });
-                } else {
-                    this.setState({
-                        success: `Update vast with id ${this.state.vast.id} succeeded`,
-                        error: null
-                    });
-                }
-            }
-        }
     }
 
     validate(vast){
         if(vast.url && !validator.isURL(vast.url)){
             this.setState({
-                error: 'Vast url is not valid.',
-                success: null
+                error: 'Vast url is not valid.'
             });
 
             return false;
@@ -67,8 +33,7 @@ class Form extends Component {
             'top_left', 'top_middle', 'top_right', 'middle_left', 'middle_right', 'bottom_left', 'bottom_middle', 'bottom_right'
         ])){
             this.setState({
-                error: 'Vast position is not valid.',
-                success: null
+                error: 'Vast position is not valid.'
             });
 
             return false;
@@ -76,8 +41,7 @@ class Form extends Component {
 
         if(vast.width && (!validator.isNumeric(vast.width.toString()) || Number(vast.width) < 100 || Number(vast.width) > 1000)){
             this.setState({
-                error: 'Vast width is not valid.',
-                success: null
+                error: 'Vast width is not valid.'
             });
 
             return false;
@@ -85,8 +49,7 @@ class Form extends Component {
 
         if(vast.height && (!validator.isNumeric(vast.height.toString()) || Number(vast.height) < 100 || Number(vast.height) > 1000)){
             this.setState({
-                error: 'Vast height is not valid.',
-                success: null
+                error: 'Vast height is not valid.'
             });
 
             return false;
@@ -108,8 +71,7 @@ class Form extends Component {
         if(!isCreate){
             if(!vast.id){
                 this.setState({
-                    error: 'Error update vast.',
-                    success: null
+                    error: 'Error update vast.'
                 });
 
                 return;
@@ -119,8 +81,7 @@ class Form extends Component {
         } else {
             if(!vast.url){
                 this.setState({
-                    error: 'Vast url is required.',
-                    success: null
+                    error: 'Vast url is required.'
                 });
 
                 return;
@@ -181,7 +142,6 @@ class Form extends Component {
                     </>
                 ) : <p>Loading...</p> }
                 { this.state.error ? <div className="alert alert-danger" role="alert">{ this.state.error }</div> : null }
-                { this.state.success ? <div className="alert alert-success" role="alert">{ this.state.success }</div> : null }
             </form>
         );
     }
@@ -189,8 +149,8 @@ class Form extends Component {
 
 const mapStateToProps = (state, prevProps) => {
     return {
-        created: state.created,
-        updated: state.updated,
+        createdStatus: state.created,
+        updatedStatus: state.updated,
         vast: state.vast ? state.vast : prevProps.vast,
         isCreate: prevProps.isCreate
     };
