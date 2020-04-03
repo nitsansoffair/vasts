@@ -49,7 +49,7 @@ class Vasts extends Component {
             <>
                 <button type="button" className="btn btn-link" onClick={(e) => {
                     e.preventDefault();
-                    this.props.toggleUpdateVastForm();
+                    this.props.toggleUpdateVastForm(id);
                 }}>
                     Edit
                 </button> |
