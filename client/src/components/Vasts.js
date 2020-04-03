@@ -49,7 +49,7 @@ class Vasts extends Component {
             <>
                 <button type="button" className="btn btn-link" onClick={(e) => {
                     e.preventDefault();
-                    this.props.toggleUpdateVastForm(id);
+                    this.props.toggleUpdateVastForm();
                 }}>
                     Edit
                 </button> |
@@ -133,7 +133,15 @@ class Vasts extends Component {
         if(formEditId){
             const vast = this.props.vasts.find(vast => vast.id === formEditId);
 
-            return this.renderUpdateVastForm(vast);
+            if(vast){
+                return this.renderUpdateVastForm(vast);
+            }
+
+            return (
+                <div className="alert alert-danger" role="alert">
+                    Vast with id {formEditId} did not found.
+                </div>
+            );
         }
 
         return this.renderVasts();
