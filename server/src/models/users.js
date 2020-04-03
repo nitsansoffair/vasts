@@ -1,7 +1,6 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../db/mysql');
 
-// TODO - Hash user passwords
 const User = sequelize.define('users', {
     id: {
         type: Sequelize.INTEGER,
@@ -18,10 +17,7 @@ const User = sequelize.define('users', {
     },
     password: {
         type: Sequelize.STRING,
-        allowNull: false,
-        validate: {
-            len: [6, 10]
-        }
+        allowNull: false
     }
 });
 

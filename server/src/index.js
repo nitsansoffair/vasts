@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs');
+
 const app = require('./app');
 const sequelize = require('./db/mysql');
 const User = require('./models/users');
@@ -15,7 +17,11 @@ sequelize
     })
     .then(user => {
         if(!user){
-            return User.create({ name: process.env.DUMMY_USERNAME, email: process.env.DUMMY_EMAIL, password: process.env.DUMMY_PASSWORD });
+            return bcrypt.hash(process.env.DUMMY_PASSWORD, 12)
+                .then(hashedPassword => {
+                    return User.create({ name: process.env.DUMMY_USERNAME, email: process.env.DUMMY_EMAIL, password: hashedPassword });
+                })
+                .catch(e => console.log(e));
         }
 
         return user;
@@ -24,5 +30,3 @@ sequelize
         app.listen(port, () => console.log('Server is up on port ' + port));
     })
     .catch(err => console.log(err));
-
-// TODO - Add authorization

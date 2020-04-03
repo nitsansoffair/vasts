@@ -54,9 +54,10 @@ router.get('/fetch_vast', async (req, res) => {
         }
 
         const response = await req.user.getVasts({ where: { id: req.query.id } });
-        const vast = response[0].dataValues;
 
-        if(vast){
+        if(response.length){
+            const vast = response[0].dataValues;
+
             res.send(vast);
         } else {
             res.status(404).send({
