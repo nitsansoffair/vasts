@@ -3,9 +3,8 @@ const router = new express.Router();
 const validator = require('validator');
 
 const Vast = require('../models/vasts');
-const isAuth = require('./auth');
 
-router.post('/create_vast', isAuth, async (req, res) => {
+router.post('/create_vast', async (req, res) => {
     const { vastUrl, position = 'bottom_right', width = 100, height = 100 } = req.body;
 
     if(!vastUrl){
@@ -15,7 +14,7 @@ router.post('/create_vast', isAuth, async (req, res) => {
     }
 
     try {
-        const { dataValues } = await Vast.create({
+        const { dataValues } = await req.user.createVast({
             url: vastUrl,
             position,
             width,
@@ -30,7 +29,7 @@ router.post('/create_vast', isAuth, async (req, res) => {
 
 router.get('/fetch_vasts', async (req, res) => {
     try {
-        const vasts = await Vast.findAll();
+        const vasts = await req.user.getVasts();
 
         res.send({
             vastIds: vasts
@@ -54,7 +53,8 @@ router.get('/fetch_vast', async (req, res) => {
             });
         }
 
-        const vast = await Vast.findByPk(req.query.id);
+        const response = await req.user.getVasts({ where: { id: req.query.id } });
+        const vast = response[0].dataValues;
 
         if(vast){
             res.send(vast);
@@ -68,7 +68,7 @@ router.get('/fetch_vast', async (req, res) => {
     }
 });
 
-router.post('/edit_vast', isAuth, async (req, res) => {
+router.post('/edit_vast', async (req, res) => {
     const { vastId, vastUrl, position, width, height } = req.body;
 
     if(!vastId){
@@ -89,6 +89,12 @@ router.post('/edit_vast', isAuth, async (req, res) => {
         if(!vast){
             res.status(404).send({
                 error: 'Vast did not found.'
+            });
+        }
+
+        if(vast.userId !== req.user.id){
+            res.status(401).send({
+                error: 'You are not authorize.'
             });
         }
 
